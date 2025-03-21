@@ -1,54 +1,36 @@
 openapi: 3.0.0
 info:
-  title: Sample API Using CloudEvent Schema
+  title: AltCloudEvent API
+  description: API for handling cloud events with a type discriminator.
   version: 1.0.0
-  description: A simple API that demonstrates usage of the CloudEvent schema.
-servers:
-  - url: https://api.example.com/v1
-    description: Main API server
+
 paths:
   /events:
     post:
-      summary: Publish a CloudEvent
-      operationId: publishCloudEvent
+      summary: Create a new event
+      operationId: createEvent
       requestBody:
-        description: CloudEvent payload to be published
         content:
           application/json:
             schema:
               type: object
+              discriminator:
+                propertyName: type
+              required:
+                - type
               properties:
-                specversion:
-                  type: string
-                  example: "1.0"
                 type:
                   type: string
-                  example: "org.camaraproject.qod.qos-status-changed-event"
-                source:
-                  type: string
-                  example: "https://example.com/source"
-                id:
-                  type: string
-                  example: "1234-abc-5678-def"
-                time:
-                  type: string
-                  format: date-time
-                  example: "2025-03-17T12:00:00Z"
+                  description: The type of event.
                 data:
                   type: object
-                  additionalProperties: true
-                  example:
-                    key: "value"
-              required:
-                - specversion
-                - type
-                - source
-                - id
-                - time
-                - data
+                  description: Event-specific data.
+              oneOf:
+                - $ref: '#/components/schemas/org.camaraproject.qod.system-health-event'
+                - $ref: '#/components/schemas/org.camaraproject.qod.user-login-event'
       responses:
         '200':
-          description: CloudEvent successfully published
+          description: Event successfully created.
           content:
             application/json:
               schema:
@@ -57,97 +39,67 @@ paths:
                   status:
                     type: string
                     example: "success"
+                  message:
+                    type: string
+                    example: "Event successfully created"
+                  eventId:
+                    type: string
+                    example: "12345"
         '400':
-          description: Invalid CloudEvent payload
+          description: Invalid event data provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Invalid event data."
         '500':
-          description: Server error
-
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "An unexpected error occurred."
 components:
   schemas:
-    CloudEvent:
-      type: object
-      properties:
-        specversion:
-          type: string
-        type:
-          type: string
-        source:
-          type: string
-        id:
-          type: string
-        time:
-          type: string
-          format: date-time
-        data:
-          type: object
-          additionalProperties: true
-
-    # Event Type 1: QoS Status Changed Event
-    org.camaraproject.qod.qos-status-changed-event:
-      type: object
-      properties:
-        status:
-          type: string
-          description: "The new quality of service status."
-          example: "ok"
-        timestamp:
-          type: string
-          format: date-time
-          description: "The timestamp when the status change occurred."
-          example: "2025-03-17T12:00:00Z"
-        details:
-          type: object
-          description: "Additional details about the status change."
-          additionalProperties: true
-          example:
-            reason: "Routine check completed"
-            affectedServices:
-              - "Service A"
-              - "Service B"
-
-    # Event Type 2: System Health Event
     org.camaraproject.qod.system-health-event:
       type: object
       properties:
-        systemName:
+        type:
           type: string
-          description: "Name of the system whose health is being reported."
-          example: "System A"
-        healthStatus:
+          enum: [org.camaraproject.qod.system-health-event]
+        status:
           type: string
-          description: "Current health status of the system."
-          example: "healthy"
-        metrics:
-          type: object
-          description: "System metrics related to health."
-          additionalProperties: true
-          example:
-            cpuUsage: 23
-            memoryUsage: 45
-            diskSpace: 90
-
-    # Event Type 3: User Activity Event
-    org.camaraproject.qod.user-activity-event:
-      type: object
-      properties:
-        userId:
-          type: string
-          description: "ID of the user performing the activity."
-          example: "user123"
-        activityType:
-          type: string
-          description: "The type of activity performed by the user."
-          example: "login"
-        activityTimestamp:
+          description: The health status of the system.
+        timestamp:
           type: string
           format: date-time
-          description: "Timestamp of when the activity was performed."
-          example: "2025-03-17T12:05:00Z"
-        activityDetails:
-          type: object
-          description: "Additional information about the user activity."
-          additionalProperties: true
-          example:
-            ipAddress: "192.168.1.1"
-            location: "New York, USA"
- 
+          description: The time when the system health event was triggered.
+
+    org.camaraproject.qod.user-login-event:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [org.camaraproject.qod.user-login-event]
+        username:
+          type: string
+          description: The username of the user who logged in.
+        ipAddress:
+          type: string
+          description: The IP address from which the user logged in.
+        timestamp:
+          type: string
+          format: date-time
+          description: The time of the user login event.
