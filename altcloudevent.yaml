@@ -26,7 +26,7 @@ paths:
                   type: object
                   description: Event-specific data.
               oneOf:
-                - $ref: '#/components/schemas/org.camaraproject.qod.system-health-event'
+                - $ref: '#/components/schemas/local_var_files'
                 - $ref: '#/components/schemas/org.camaraproject.qod.user-login-event'
       responses:
         '200':
@@ -73,7 +73,7 @@ paths:
                     example: "An unexpected error occurred."
 components:
   schemas:
-    org.camaraproject.qod.system-health-event:
+    local_var_files:
       type: object
       properties:
         type:
