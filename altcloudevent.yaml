@@ -1,105 +1,70 @@
 openapi: 3.0.0
 info:
-  title: AltCloudEvent API
-  description: API for handling cloud events with a type discriminator.
+  title: CloudEvent API
   version: 1.0.0
-
 paths:
   /events:
     post:
-      summary: Create a new event
-      operationId: createEvent
+      summary: "Send a CloudEvent"
+      operationId: sendCloudEvent
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              discriminator:
-                propertyName: type
-              required:
-                - type
-              properties:
-                type:
-                  type: string
-                  description: The type of event.
-                data:
-                  type: object
-                  description: Event-specific data.
-              oneOf:
-                - $ref: '#/components/schemas/local_var_files'
-                - $ref: '#/components/schemas/org.camaraproject.qod.user-login-event'
+              $ref: "#/components/schemas/CloudEvent"
       responses:
         '200':
-          description: Event successfully created.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: "success"
-                  message:
-                    type: string
-                    example: "Event successfully created"
-                  eventId:
-                    type: string
-                    example: "12345"
-        '400':
-          description: Invalid event data provided.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: "error"
-                  message:
-                    type: string
-                    example: "Invalid event data."
-        '500':
-          description: Internal server error.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: "error"
-                  message:
-                    type: string
-                    example: "An unexpected error occurred."
+          description: Successfully received CloudEvent
 components:
   schemas:
-    local_var_files:
+    CloudEvent:
       type: object
       properties:
+        specversion:
+          type: string
+          description: The version of the CloudEvent specification.
+          example: "1.0"
         type:
           type: string
-          enum: [org.camaraproject.qod.system-health-event]
-        status:
+          description: The type of the event.
+          example: "org.camaraproject.qod.user-login-event"
+        source:
           type: string
-          description: The health status of the system.
-        timestamp:
+          description: The source of the event.
+          example: "https://example.com"
+        id:
+          type: string
+          description: The unique identifier for the event.
+          example: "1234-5678-90ab-cdef"
+        time:
           type: string
           format: date-time
-          description: The time when the system health event was triggered.
-
+          description: The time when the event was emitted.
+          example: "2025-03-24T12:34:56Z"
+        datacontenttype:
+          type: string
+          description: The content type of the data.
+          example: "application/json"
+        data:
+          type: object
+          description: The event data (payload).
+          additionalProperties: true
+      oneOf:
+        - $ref: "#/components/schemas/org.camaraproject.qod.user-login-event"
+        - $ref: "#/components/schemas/org.camaraproject.detail-event"
+    
     org.camaraproject.qod.user-login-event:
       type: object
       properties:
-        type:
+        eventDetail:
           type: string
-          enum: [org.camaraproject.qod.user-login-event]
-        username:
+          description: "Details specific to the example event."
+          example: "Example detail data"
+    
+    org.camaraproject.detail-event:
+      type: object
+      properties:
+        eventDetail:
           type: string
-          description: The username of the user who logged in.
-        ipAddress:
-          type: string
-          description: The IP address from which the user logged in.
-        timestamp:
-          type: string
-          format: date-time
-          description: The time of the user login event.
+          description: "Details specific to the other event."
+          example: "Other event detail"
