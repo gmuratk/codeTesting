@@ -837,8 +837,6 @@ components:
         - $ref: "#/components/schemas/CloudEvent"
         - type: object
           properties:
-            eventType:
-              type: string
             data:
               $ref: "#/components/schemas/ReachabilityDataSmsDisconnected"
 
@@ -847,9 +845,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/CloudEvent"
         - type: object
-          properties:
-            eventType:
-              type: string          
+          properties:   
             data:
               $ref: "#/components/schemas/ReachabilityDataSmsDisconnected"
 
@@ -859,8 +855,6 @@ components:
         - $ref: "#/components/schemas/CloudEvent"
         - type: object
           properties:
-            eventType:
-              type: string          
             data:
               $ref: "#/components/schemas/ReachabilityDataSmsDisconnected"
 
@@ -881,8 +875,6 @@ components:
         - $ref: "#/components/schemas/CloudEvent"
         - type: object
           properties:
-            eventType:
-              type: string          
             data:
               $ref: "#/components/schemas/SubscriptionEnds"
 
