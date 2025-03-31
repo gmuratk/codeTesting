@@ -164,7 +164,7 @@ paths:
                 content:
                   application/cloudevents+json:
                     schema:
-                      $ref: "#/components/schemas/CloudEvent"
+                      $ref: "https://raw.githubusercontent.com/gmuratk/codeTesting/refs/heads/main/camara_commonwith_cloudevent_with_dscrmntr.yaml/components/schemas/CloudEvent"
                     examples:
                       reachability-data:
                         $ref: "#/components/examples/REACHABILITY_DATA"
@@ -809,7 +809,7 @@ components:
     org.camaraproject.device-reachability-status-subscriptions.v0.reachability-sms:
       description: event structure for reachability SMS usage
       allOf:
-        - $ref: "#/components/schemas/CloudEvent"
+        - $ref: "https://raw.githubusercontent.com/gmuratk/codeTesting/refs/heads/main/camara_commonwith_cloudevent_with_dscrmntr.yaml/components/schemas/CloudEvent"
         - type: object
           properties:   
             data:
