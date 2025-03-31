@@ -256,6 +256,30 @@ components:
       discriminator:
         propertyName: type     
 
+    DateTime:
+      type: string
+      format: date-time
+      description: |
+        Timestamp of when the occurrence happened. Must adhere to RFC 3339. 
+        WARN: This optional field in CloudEvents specification is required in CAMARA APIs implementation.
+      example: '2018-04-05T17:31:00Z'
+
+    Source:
+      type: string
+      format: uri-reference
+      minLength: 1
+      description: |
+        Identifies the context in which an event happened - be a non-empty `URI-reference` like:
+        - URI with a DNS authority:
+          * https://github.com/cloudevents
+          * mailto:cncf-wg-serverless@lists.cncf.io
+        - Universally-unique URN with a UUID:
+          * urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66
+        - Application-specific identifier:
+          * /cloudevents/spec/pull/123
+          * 1-555-123-4567
+      example: "https://notificationSendServer12.supertelco.com"
+      
   responses:
 #######################################################
 #######################################################
