@@ -112,7 +112,7 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 0.7.0
-  x-camara-commonalities: https://raw.githubusercontent.com/gmuratk/codeTesting/refs/heads/main/camara_commonwith_cloudevent_with_dscrmntr.yaml
+  x-camara-commonalities: 0.5
 externalDocs:
   description: Product documentation at CAMARA
   url: https://github.com/camaraproject/DeviceStatus
@@ -164,7 +164,7 @@ paths:
                 content:
                   application/cloudevents+json:
                     schema:
-                      $ref: "{{x-camara-commonalities}}#/components/schemas/CloudEvent"
+                      $ref: "#/components/schemas/CommonCloudEvent"
                     examples:
                       reachability-data:
                         $ref: "#/components/examples/REACHABILITY_DATA"
@@ -357,6 +357,8 @@ components:
         example: "b4333c46-49c0-4f62-80d7-f0ef930f1c46"
 
   schemas:
+    CommonCloudEvent:
+      $ref: "https://raw.githubusercontent.com/gmuratk/codeTesting/refs/heads/main/camara_commonwith_cloudevent_with_dscrmntr.yaml#/components/schemas/CloudEvent"
     ErrorInfo:
       type: object
       required:
@@ -800,7 +802,7 @@ components:
     org.camaraproject.device-reachability-status-subscriptions.v0.reachability-data:
       description: event structure for reachability data usage
       allOf:
-        - $ref: "{{x-camara-commonalities}}#/components/schemas/CloudEvent"
+        - $ref: "#/components/schemas/CommonCloudEvent"
         - type: object
           properties:
             data:
@@ -809,7 +811,7 @@ components:
     org.camaraproject.device-reachability-status-subscriptions.v0.reachability-sms:
       description: event structure for reachability SMS usage
       allOf:
-        - $ref: "{{x-camara-commonalities}}#/components/schemas/CloudEvent"
+        - $ref: "#/components/schemas/CommonCloudEvent"
         - type: object
           properties:   
             data:
@@ -818,7 +820,7 @@ components:
     org.camaraproject.device-reachability-status-subscriptions.v0.reachability-disconnected:
       description: event structure for disconnection
       allOf:
-        - $ref: "{{x-camara-commonalities}}#/components/schemas/CloudEvent"
+        - $ref: "#/components/schemas/CommonCloudEvent"
         - type: object
           properties:
             data:
@@ -838,7 +840,7 @@ components:
     org.camaraproject.device-reachability-status-subscriptions.v0.subscription-ends:
       description: event structure for event subscription ends
       allOf:
-        - $ref: "{{x-camara-commonalities}}#/components/schemas/CloudEvent"
+        - $ref: "#/components/schemas/CommonCloudEvent"
         - type: object
           properties:
             data:
