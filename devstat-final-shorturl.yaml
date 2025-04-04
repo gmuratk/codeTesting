@@ -358,7 +358,9 @@ components:
 
   schemas:
     CommonCloudEvent:
-      $ref: "https://raw.githubusercontent.com/gmuratk/codeTesting/refs/heads/main/camara_commonwith_cloudevent_with_dscrmntr.yaml#/components/schemas/CloudEvent"
+      description: trying something
+      allOf:
+        - $ref: "https://raw.githubusercontent.com/gmuratk/codeTesting/refs/heads/main/camara_commonwith_cloudevent_with_dscrmntr.yaml#/components/schemas/CloudEvent"
     ErrorInfo:
       type: object
       required:
