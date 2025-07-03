@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: Sample Inheritance API
+  version: 1.0.0
+paths:
+  /employees:
+    get:
+      summary: Get all employees
+      responses:
+        '200':
+          description: A list of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+
+components:
+  schemas:
+    Person:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+        - id
+        - name
+
+    Employee:
+      allOf:
+        - $ref: '#/components/schemas/Person'
+        - type: object
+          properties:
+            department:
+              type: string
+            role:
+              type: string
+          required:
+            - department
