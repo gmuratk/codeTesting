@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: Multiple Media Types Demo API (Object Meta)
+  version: 1.1.0
+
+paths:
+  /status:
+    get:
+      summary: Get service status
+      description: >
+        Demonstrates a 200 response that can be returned with different
+        media types, each having its own schema. One is the normal JSON
+        response, the other is a meta-only object.
+      operationId: getStatus
+      responses:
+        '200':
+          description: Service status (normal or meta-only)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+              examples:
+                NormalStatus:
+                  summary: Normal structured status response
+                  value:
+                    status: "ok"
+                    timestamp: "2025-01-01T12:00:00Z"
+
+            application/vnd.example.status-meta+json:
+              schema:
+                $ref: '#/components/schemas/StatusMeta'
+              examples:
+                MetaOnlyDegraded:
+                  summary: Meta-only degraded status
+                  value:
+                    code: "degraded"
+                    detail: "Service is experiencing partial outages."
+                MetaOnlyUnknown:
+                  summary: Meta-only unknown status
+                  value:
+                    code: "unknown"
+                    detail: "Current service status cannot be determined."
+components:
+  schemas:
+    StatusResponse:
+      type: object
+      description: Normal structured status response.
+      properties:
+        status:
+          type: string
+          description: Overall service status
+          enum: [ok, degraded, unavailable]
+        timestamp:
+          type: string
+          format: date-time
+          description: Time when the status was last evaluated
+      required:
+        - status
+        - timestamp
+
+    StatusMeta:
+      type: object
+      description: >
+        Meta-only status information, used with the
+        application/vnd.example.status-meta+json media type.
+      properties:
+        code:
+          type: string
+          description: >
+            Short machine-readable meta code, e.g. "ok", "degraded",
+            "unavailable", "unknown".
+        detail:
+          type: string
+          description: Optional human-readable explanation.
+      required:
+        - code
