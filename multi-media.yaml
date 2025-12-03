@@ -1,0 +1,56 @@
+openapi: 3.0.3
+info:
+  title: Multiple Media Types Demo API
+  version: 1.0.0
+
+paths:
+  /status:
+    get:
+      summary: Get service status
+      description: >
+        Demonstrates a 200 response that can be returned with different
+        media types, each having its own schema.
+      operationId: getStatus
+      responses:
+        '200':
+          description: Service status (normal or meta-only)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+              examples:
+                NormalStatus:
+                  summary: Normal structured status response
+                  value:
+                    status: "ok"
+                    timestamp: "2025-01-01T12:00:00Z"
+            application/vnd.example.status-meta+json:
+              schema:
+                $ref: '#/components/schemas/StatusMeta'
+              examples:
+                MetaOnly:
+                  summary: Meta-only status
+                  value: "degraded"
+
+components:
+  schemas:
+    StatusResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Overall service status
+          enum: [ok, degraded, unavailable]
+        timestamp:
+          type: string
+          format: date-time
+          description: Time when the status was last evaluated
+      required:
+        - status
+        - timestamp
+
+    StatusMeta:
+      type: string
+      description: >
+        Meta-only status information. For this demo, it is just a string,
+        e.g. "ok", "degraded", "unavailable".
